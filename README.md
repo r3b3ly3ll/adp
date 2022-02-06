@@ -1,2 +1,1 @@
-# adp
-Axcelerate ADP Library
+# Go Library for OpenText Axcelerate
