@@ -1,5 +1,9 @@
 package task
 
+import (
+	"encoding/json"
+)
+
 // ListEntitiesConfiguration ...
 type ListEntitiesConfiguration struct {
 	AdpProgressTaskTimeout                                 int      `json:"adp_progressTaskTimeout,omitempty"`
@@ -102,16 +106,27 @@ func WithListEntitiesAxcFields(s string) func(*ListEntitiesConfiguration) {
 	}
 }
 
-// WithListEntitiesAxcFields ...
-func WithListEntitiesAxcRequestTimeoutSeconds(i int) func(*ListEntitiesConfiguration) {
-	return func(c *ListEntitiesConfiguration) {
-		c.AdpListEntitiesAxcRequestTimeoutSeconds = i
-	}
-}
-
 // WithListEntitiesStatus ...
 func WithListEntitiesStatus(s string) func(*ListEntitiesConfiguration) {
 	return func(c *ListEntitiesConfiguration) {
 		c.AdpListEntitiesStatus = s
 	}
+}
+
+// ListEntitiesExecutionMetaData ...
+type ListEntitiesExecutionMetaData struct {
+	AdpEntitiesOutputFileName string          `json:"adp_entities_output_file_name"`
+	AdpEntitiesJSONOutput     json.RawMessage `json:"adp_entities_json_output"`
+}
+
+func (meta *ListEntitiesExecutionMetaData) Parse(raw json.RawMessage) (string, error) {
+	err := json.Unmarshal(raw, meta)
+	if err != nil {
+		return "", err
+	}
+
+	output := string(meta.AdpEntitiesJSONOutput)
+	unquoteJSONOutput(&output)
+
+	return output, nil
 }
