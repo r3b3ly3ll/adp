@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"opentext.com/axcelerate/adp/client"
 	"opentext.com/axcelerate/adp/task"
 )
@@ -12,6 +14,8 @@ func main() {
 	client := client.NewClient()
 
 	resp, _ := client.Do(req)
-	resp.Output()
+	if resp.ExecutionStatus == "success" {
+		fmt.Println("hello")
+	}
 
 }

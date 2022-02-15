@@ -119,14 +119,6 @@ type ListEntitiesExecutionMetaData struct {
 	AdpEntitiesJSONOutput     json.RawMessage `json:"adp_entities_json_output"`
 }
 
-func (meta *ListEntitiesExecutionMetaData) Parse(raw json.RawMessage) (string, error) {
-	err := json.Unmarshal(raw, meta)
-	if err != nil {
-		return "", err
-	}
-
-	output := string(meta.AdpEntitiesJSONOutput)
-	unquoteJSONOutput(&output)
-
-	return output, nil
+func (meta *ListEntitiesExecutionMetaData) Output() string {
+	return string(meta.AdpEntitiesJSONOutput)
 }
