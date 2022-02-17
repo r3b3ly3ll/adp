@@ -3,7 +3,6 @@ package command
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/urfave/cli/v2"
@@ -40,7 +39,11 @@ func ExecuteTask(c *cli.Context) error {
 	}
 
 	if err = client.ADP.Run(); err != nil {
-		return errors.New("client exeuction error")
+		return fmt.Errorf("executeTask: %w", err)
+	}
+
+	if client.ADP.TaskResp.IsSuccess() {
+		return fmt.Errorf("%s", "executeTask: status does not match success")
 	}
 
 	output := client.ADP.TaskResp.ExecutionMetaData.Output()
@@ -70,7 +73,7 @@ func listEntities(c *cli.Context) error {
 	client.ADP.TaskResp = task.NewListEntitiesTaskResponse()
 
 	if err = ExecuteTask(c); err != nil {
-		return err
+		return fmt.Errorf("task ListEntities: %w", err)
 	}
 
 	return nil

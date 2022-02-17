@@ -3,22 +3,21 @@ package client
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
 
 	"opentext.com/axcelerate/adp/task"
 )
 
-var ADP Client
+var ADP ADPClient
 
-type Client struct {
+type ADPClient struct {
 	TaskReq  *task.Request
 	TaskResp *task.Response
 	RC       *RestClient
 }
 
-func (c *Client) NewRestRequest() (*http.Request, error) {
+func (c *ADPClient) NewRestRequest() (*http.Request, error) {
 	payload, err := json.Marshal(c.TaskReq)
 	if err != nil {
 		return nil, err
@@ -36,12 +35,11 @@ func (c *Client) NewRestRequest() (*http.Request, error) {
 	return req, nil
 }
 
-func (c *Client) Run() error {
+func (c *ADPClient) Run() error {
 	var req *http.Request
 	var resp *http.Response
 
 	var data []byte
-
 	var err error
 
 	if req, err = c.NewRestRequest(); err != nil {
@@ -59,10 +57,6 @@ func (c *Client) Run() error {
 
 	if err = json.Unmarshal(data, c.TaskResp); err != nil {
 		return err
-	}
-
-	if !ADP.TaskResp.IsSuccess() {
-		return errors.New("execution failed")
 	}
 
 	return err
