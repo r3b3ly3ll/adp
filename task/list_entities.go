@@ -52,7 +52,7 @@ func (c *ListEntitiesConfiguration) EnableAdpExecutionPersistent() {
 }
 
 // NewListEntitiesTaskRequest ...
-func NewListEntitiesTaskRequest(opts ...func(*ListEntitiesConfiguration)) *TaskRequest {
+func NewListEntitiesTaskRequest(opts ...func(*ListEntitiesConfiguration)) *Request {
 
 	cfg := &ListEntitiesConfiguration{
 		AdpLoggingEnabled:      false,
@@ -63,7 +63,7 @@ func NewListEntitiesTaskRequest(opts ...func(*ListEntitiesConfiguration)) *TaskR
 		opt(cfg)
 	}
 
-	return &TaskRequest{
+	return &Request{
 		TaskType:          "List Entities",
 		TaskDescription:   "Writes a list of entities to an output variable",
 		TaskConfiguration: cfg,
@@ -120,5 +120,15 @@ type ListEntitiesExecutionMetaData struct {
 }
 
 func (meta *ListEntitiesExecutionMetaData) Output() string {
-	return string(meta.AdpEntitiesJSONOutput)
+
+	output := string(meta.AdpEntitiesJSONOutput)
+	unquoteJSONOutput(&output)
+
+	return output
+}
+
+func NewListEntitiesTaskResponse() *Response {
+	return &Response{
+		ExecutionMetaData: &ListEntitiesExecutionMetaData{},
+	}
 }
