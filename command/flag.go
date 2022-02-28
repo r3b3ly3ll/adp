@@ -11,7 +11,7 @@ var (
 	// ID ...
 	ID = &cli.StringFlag{
 		Name:  "ID",
-		Usage: "Entity ID e.g., singleMindServer.G00000, documentHold.G00000",
+		Usage: "Entity ID e.g., singleMindServer.G00000",
 	}
 
 	// RelatedEntity ...
@@ -82,6 +82,16 @@ var (
 	// Identifiers ...
 	Identifiers = &cli.StringFlag{
 		Name:  "Identifiers",
+		Usage: "List of Identifier e.g., documentHold.G00000,singleMindServer.G00001",
+	}
+
+	/*
+		StopProcesses
+	*/
+
+	// ProcessIdentifiers ...
+	ProcessIdentifiers = &cli.StringFlag{
+		Name:  "ProcessIdentifiers",
 		Usage: "List of Identifier e.g., documentHold.G00000,singleMindServer.G00001",
 	}
 

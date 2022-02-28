@@ -61,14 +61,10 @@ type PingProjectExecutionMetaData struct {
 }
 
 // Output ...
-func (meta *PingProjectExecutionMetaData) Output(raw json.RawMessage) (string, error) {
-	err := json.Unmarshal(raw, meta)
-	if err != nil {
-		return "", err
-	}
+func (meta *PingProjectExecutionMetaData) Output() string {
 
 	output := string(meta.PingProjectResult)
 	unquoteJSONOutput(&output)
 
-	return output, nil
+	return output
 }

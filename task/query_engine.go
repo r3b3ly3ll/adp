@@ -140,9 +140,15 @@ func WithQueryEngineEngineUserPassword(s string) func(*QueryEngineConfiguration)
 }
 
 // QueryEngineExecutionMetaData ...
-type QueryEngineExecutionMetaData struct{}
+type QueryEngineExecutionMetaData json.RawMessage
 
 // Output ...
-func (meta *QueryEngineExecutionMetaData) Output(raw json.RawMessage) (string, error) {
-	return string(raw), nil
+func (meta *QueryEngineExecutionMetaData) Output() string {
+	return string(*meta)
+}
+
+func NewQueryEngineTaskResponse() *Response {
+	return &Response{
+		ExecutionMetaData: &QueryEngineExecutionMetaData{},
+	}
 }

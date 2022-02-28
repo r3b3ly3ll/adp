@@ -54,6 +54,17 @@ var (
 		Action: pingProject,
 	}
 
+	// StopProcessesCmd ...
+	StopProcessesCmd = &cli.Command{
+		Name:    "stopProcesses",
+		Usage:   `stopProcesses --ProcessIdentifiers documentHold.G00000`,
+		Aliases: []string{"k"},
+		Flags: []cli.Flag{
+			ProcessIdentifiers,
+		},
+		Action: stopProcesses,
+	}
+
 	Commands = []*cli.Command{
 		ListEntitiesCmd,
 		TaxonomyStatisticCmd,
@@ -124,6 +135,9 @@ func taxonomyStatistic(c *cli.Context) error {
 		task.WithTaxonomyStatisticEngineUserPassword(c.String("EngineUserPassword")),
 	)
 
+	// initialize TaxonomyStatisticTaskResponse with specific ExecutionMetaData struct.
+	client.ADP.TaskResp = task.NewTaxonomyStatisticTaskResponse()
+
 	if err = ExecuteTask(c); err != nil {
 		return fmt.Errorf("task TaxonomyStatistic: %w", err)
 	}
@@ -141,5 +155,19 @@ func pingProject(c *cli.Context) error {
 	if err = ExecuteTask(c); err != nil {
 		return fmt.Errorf("task TaxonomyStatistic: %w", err)
 	}
+	return nil
+}
+
+func stopProcesses(c *cli.Context) error {
+	var err error
+
+	client.ADP.TaskReq = task.NewStopProcessesTaskRequest(
+		task.WithStopProcessProcessProcessIdentifiers(c.String("ProcessIdentifiers")),
+	)
+
+	if err = ExecuteTask(c); err != nil {
+		return err
+	}
+
 	return nil
 }

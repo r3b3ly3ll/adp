@@ -90,3 +90,25 @@ func parseEngineTaxonomiesArgs(s string) []EngineTaxonomyArg {
 
 	return engineTaxonomyArgs
 }
+
+// ProcessIdentifierArg ...
+type ProcessIdentifierArg struct {
+	ProcessIdenifier string `json:"Process identifier"`
+	StopRecursive    bool   `json:"Stop recursive"`
+}
+
+func parseProcessIdentifierArgs(s string) []ProcessIdentifierArg {
+	var processIdentifierArgs []ProcessIdentifierArg
+	for _, proc := range strings.Split(s, ARGDELIMITER) {
+		proc = strings.TrimSpace(proc)
+		if len(proc) > 0 {
+			processIdentifierArgs = append(processIdentifierArgs,
+				ProcessIdentifierArg{
+					ProcessIdenifier: proc,
+					StopRecursive:    true, // always recursive
+				},
+			)
+		}
+	}
+	return processIdentifierArgs
+}

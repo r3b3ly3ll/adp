@@ -138,14 +138,16 @@ type TaxonomyStatisticExecutionMetaData struct {
 	AdpTaxonomyStatisticsJsonOutput json.RawMessage `json:"adp_taxonomy_statistics_json_output"`
 }
 
-func (meta *TaxonomyStatisticExecutionMetaData) Output(raw json.RawMessage) (string, error) {
-	err := json.Unmarshal(raw, meta)
-	if err != nil {
-		return "", err
-	}
+func (meta *TaxonomyStatisticExecutionMetaData) Output() string {
 
 	output := string(meta.AdpTaxonomyStatisticsJsonOutput)
 	unquoteJSONOutput(&output)
 
-	return output, nil
+	return output
+}
+
+func NewTaxonomyStatisticTaskResponse() *Response {
+	return &Response{
+		ExecutionMetaData: &TaxonomyStatisticExecutionMetaData{},
+	}
 }
