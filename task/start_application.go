@@ -69,6 +69,6 @@ func (meta *StartApplicationExecutionMetaData) Output() string {
 
 func NewStartApplictionTaskResponse() *Response {
 	return &Response{
-		ExecutionMetaData: &StartApplicationExecutionMetaData{},
+		ExecutionMetaData: new(StartApplicationExecutionMetaData),
 	}
 }

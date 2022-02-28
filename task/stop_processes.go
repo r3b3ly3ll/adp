@@ -62,6 +62,6 @@ func (meta *StopProcessesExecutionMetaData) Output() string {
 
 func NewStopProcessesTaskResponse() *Response {
 	return &Response{
-		ExecutionMetaData: &StopProcessesExecutionMetaData{},
+		ExecutionMetaData: new(StopProcessesExecutionMetaData),
 	}
 }

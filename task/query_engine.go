@@ -149,6 +149,6 @@ func (meta *QueryEngineExecutionMetaData) Output() string {
 
 func NewQueryEngineTaskResponse() *Response {
 	return &Response{
-		ExecutionMetaData: &QueryEngineExecutionMetaData{},
+		ExecutionMetaData: new(QueryEngineExecutionMetaData),
 	}
 }
