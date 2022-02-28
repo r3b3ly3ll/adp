@@ -25,8 +25,39 @@ var (
 		Action: listEntities,
 	}
 
+	// TaxonomyStatisticCmd ...
+	TaxonomyStatisticCmd = &cli.Command{
+		Name:    "taxonomyStatistic",
+		Usage:   `adp-cli -p * taxonomyStatistic --EngineTaxonomies "csv_guts_datatype=docs" --TargetTaxonomy rm_loadbatch --ApplicationIdentifier documentHold.G00000`,
+		Aliases: []string{"t"},
+		Flags: []cli.Flag{
+			ApplicationIdentifier,
+			EngineTaxonomies,
+			EngineName,
+			TargetTaxonomy,
+			ListCategoryProperties,
+			ComputeCounts,
+			EngineUserName,
+			EngineUserPassword,
+		},
+		Action: taxonomyStatistic,
+	}
+
+	// PingProjectCmd ...
+	PingProjectCmd = &cli.Command{
+		Name:    "pingProject",
+		Usage:   `adp-cli -p * pingProject --Identifiers documentHold.G00000`,
+		Aliases: []string{"p"},
+		Flags: []cli.Flag{
+			Identifiers,
+		},
+		Action: pingProject,
+	}
+
 	Commands = []*cli.Command{
 		ListEntitiesCmd,
+		TaxonomyStatisticCmd,
+		PingProjectCmd,
 	}
 )
 
@@ -76,5 +107,39 @@ func listEntities(c *cli.Context) error {
 		return fmt.Errorf("task ListEntities: %w", err)
 	}
 
+	return nil
+}
+
+func taxonomyStatistic(c *cli.Context) error {
+	var err error
+
+	client.ADP.TaskReq = task.NewTaxonomyStatisticTaskRequest(
+		task.WithTaxonomyStatisticEngineTaxonomies(c.String("EngineTaxonomies")),
+		task.WithTaxonomyStatisticEngineName(c.String("EngineName")),
+		task.WithTaxonomyStatisticOutputTaxonomies(c.String("TargetTaxonomy")),
+		task.WithTaxonomyStatisticComputeCounts(c.String("ComputeCounts")),
+		task.WithTaxonomyStatisticListCategoryProperties(c.String("ListCategoryProperties")),
+		task.WithTaxonomyStatisticApplicationIdentifier(c.String("ApplicationIdentifier")),
+		task.WithTaxonomyStatisticEngineUserName(c.String("EngineUserName")),
+		task.WithTaxonomyStatisticEngineUserPassword(c.String("EngineUserPassword")),
+	)
+
+	if err = ExecuteTask(c); err != nil {
+		return fmt.Errorf("task TaxonomyStatistic: %w", err)
+	}
+
+	return nil
+}
+
+func pingProject(c *cli.Context) error {
+	var err error
+
+	client.ADP.TaskReq = task.NewPingProjectTaskRequest(
+		task.WithPingProjectIdentifiers(c.String("Identifiers")),
+	)
+
+	if err = ExecuteTask(c); err != nil {
+		return fmt.Errorf("task TaxonomyStatistic: %w", err)
+	}
 	return nil
 }
