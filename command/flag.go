@@ -96,6 +96,17 @@ var (
 	}
 
 	/*
+		StartApplication
+	*/
+
+	// ApplicationURL ...
+	ApplicationURL = &cli.StringFlag{
+		Name:  "ApplicationURL",
+		Usage: "Variable name for application URL output",
+		Value: "appURL",
+	}
+
+	/*
 	 Shared
 	*/
 

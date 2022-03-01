@@ -3,6 +3,7 @@ package client
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -22,6 +23,8 @@ func (c *ADPClient) NewRestRequest() (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Printf("=== payload === %s\n", payload)
 
 	// contruct rest request
 	req, err := http.NewRequest(http.MethodPut, c.RC.endpoint, bytes.NewBuffer(payload))
@@ -54,6 +57,8 @@ func (c *ADPClient) Run() error {
 	if data, err = ioutil.ReadAll(resp.Body); err != nil {
 		return err
 	}
+
+	fmt.Printf("=== output === %s\n", data)
 
 	if err = json.Unmarshal(data, c.TaskResp); err != nil {
 		return err

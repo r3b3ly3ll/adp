@@ -65,10 +65,24 @@ var (
 		Action: stopProcesses,
 	}
 
+	// StartApplicationCmd ...
+	StartApplicationCmd = &cli.Command{
+		Name:    "startApplication",
+		Usage:   `startApplication --ApplicationIdentifier documentHold.G00000`,
+		Aliases: []string{"g"},
+		Flags: []cli.Flag{
+			ApplicationIdentifier,
+			ApplicationURL,
+		},
+		Action: startApplication,
+	}
+
 	Commands = []*cli.Command{
 		ListEntitiesCmd,
 		TaxonomyStatisticCmd,
 		PingProjectCmd,
+		StopProcessesCmd,
+		StartApplicationCmd,
 	}
 )
 
@@ -84,7 +98,7 @@ func ExecuteTask(c *cli.Context) error {
 		return fmt.Errorf("executeTask: %w", err)
 	}
 
-	if client.ADP.TaskResp.IsSuccess() {
+	if !client.ADP.TaskResp.IsSuccess() {
 		return fmt.Errorf("%s", "executeTask: status does not match success")
 	}
 
@@ -152,8 +166,10 @@ func pingProject(c *cli.Context) error {
 		task.WithPingProjectIdentifiers(c.String("Identifiers")),
 	)
 
+	client.ADP.TaskResp = task.NewPingProjectTaskResponse()
+
 	if err = ExecuteTask(c); err != nil {
-		return fmt.Errorf("task TaxonomyStatistic: %w", err)
+		return fmt.Errorf("task PingProject: %w", err)
 	}
 	return nil
 }
@@ -164,6 +180,25 @@ func stopProcesses(c *cli.Context) error {
 	client.ADP.TaskReq = task.NewStopProcessesTaskRequest(
 		task.WithStopProcessProcessProcessIdentifiers(c.String("ProcessIdentifiers")),
 	)
+
+	client.ADP.TaskResp = task.NewStopProcessesTaskResponse()
+
+	if err = ExecuteTask(c); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func startApplication(c *cli.Context) error {
+	var err error
+
+	client.ADP.TaskReq = task.NewStartApplicationTaskRequest(
+		task.WithStartApplicationApplicationIdentifier(c.String("ApplicationIdentifier")),
+		task.WithStartApplicationApplicationURL(c.String("ApplicationUrl")),
+	)
+
+	client.ADP.TaskResp = task.NewStartApplictionTaskResponse()
 
 	if err = ExecuteTask(c); err != nil {
 		return err

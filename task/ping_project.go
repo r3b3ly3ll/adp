@@ -50,7 +50,6 @@ func NewPingProjectTaskRequest(opts ...func(*PingProjectConfiguration)) *Request
 // WithPingProjectIdentifiers ...
 func WithPingProjectIdentifiers(s string) func(*PingProjectConfiguration) {
 	return func(c *PingProjectConfiguration) {
-		// mIdentifiers.split("\\s*\\,\\s*")), spliting IDs handled during execution.
 		c.AdpPingProjectIdentifiers = s
 	}
 }
@@ -67,4 +66,10 @@ func (meta *PingProjectExecutionMetaData) Output() string {
 	unquoteJSONOutput(&output)
 
 	return output
+}
+
+func NewPingProjectTaskResponse() *Response {
+	return &Response{
+		ExecutionMetaData: &PingProjectExecutionMetaData{},
+	}
 }
